@@ -6,6 +6,7 @@ import time
 cap = cv.VideoCapture(0)
 pTime = 0
 cTime = 0
+screenshot_counter = 0
 
 # Detect hands
 detectHands = mp.solutions.hands
@@ -44,7 +45,7 @@ while True:
     handResult = hands.process(imgRGB)
 
     if handResult.multi_hand_landmarks:
-        if len(handResult.multi_hand_landmakrs) == 2:
+        if len(handResult.multi_hand_landmarks) == 2:
             # Screenshot when hands are detected
             screenshot_filename = f"screenshot_{screenshot_counter}.png"
             cv.imwrite(screenshot_filename, frame)
@@ -52,13 +53,13 @@ while True:
             screenshot_counter += 1
 
         for handLms in handResult.multi_hand_landmarks:
-            for id, lm in enumerate(handLms, landmark):
+            for id, lm in enumerate(handLms.landmark):
                 # height, width, circle
-                h, w, c = img.shape
+                h, w, c = frame.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
-                cv.circle(img, (cx, cy), 3, (255, 0, 255), cv.FILLED)
+                cv.circle(frame, (cx, cy), 3, (255, 0, 255), cv.FILLED)
 
-            drawPoints.draw_landmarks(img, handLms, detectHands.HAND_CONNECTIONS)
+            drawPoints.draw_landmarks(frame, handLms, detectHands.HAND_CONNECTIONS)
 
     # Our operations on the frame come here
     # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
