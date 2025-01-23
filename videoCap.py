@@ -22,18 +22,36 @@ hands = detectHands.Hands(static_image_mode = False,
 # Draw keypoints
 drawPoints = mp.solutions.drawing_utils
 
+
+
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
+
+# Take one screenshot
+
 
 while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
 
+    imgRGB = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+    handResult = hands.process(imgRGB)
+
     # if frame is read correctly ret is True
     if not ret:
         print("Can't receive frame (stream end?). Exiting ...")
         break
+
+    
+    # Screenshot
+    #if handResult.multi_hand_landmarks:
+    #   if len(handResult.multi_hand_landmarks) == 2:
+    #       Screenshot when hands are detected
+    #       screenshot_filename = f"screenshot_{screenshot_counter}.png"
+    #       cv.imwrite(screenshot_filename, frame)
+    #       print(f"Screenshot saved: {screenshot_filename}")
+    #       screenshot_counter += 1
 
     # Display current FPS
     cTime = time.time()
@@ -41,17 +59,8 @@ while True:
     pTime = cTime
     cv.putText(frame, f'FPS:{int(fps)}', (20, 70), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     
-    imgRGB = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-    handResult = hands.process(imgRGB)
 
     if handResult.multi_hand_landmarks:
-        if len(handResult.multi_hand_landmarks) == 2:
-            # Screenshot when hands are detected
-            screenshot_filename = f"screenshot_{screenshot_counter}.png"
-            cv.imwrite(screenshot_filename, frame)
-            print(f"Screenshot saved: {screenshot_filename}")
-            screenshot_counter += 1
-
         for handLms in handResult.multi_hand_landmarks:
             for id, lm in enumerate(handLms.landmark):
                 # height, width, circle
