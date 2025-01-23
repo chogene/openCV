@@ -29,6 +29,11 @@ while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
 
+    # if frame is read correctly ret is True
+    if not ret:
+        print("Can't receive frame (stream end?). Exiting ...")
+        break
+
     # Display current FPS
     cTime = time.time()
     fps = 1 / (cTime - pTime)
@@ -39,7 +44,14 @@ while True:
     handResult = hands.process(imgRGB)
 
     if handResult.multi_hand_landmarks:
-        for handLms in handResult.multi_hand_landmakrs:
+        if len(handResult.multi_hand_landmakrs) == 2:
+            # Screenshot when hands are detected
+            screenshot_filename = f"screenshot_{screenshot_counter}.png"
+            cv.imwrite(screenshot_filename, frame)
+            print(f"Screenshot saved: {screenshot_filename}")
+            screenshot_counter += 1
+
+        for handLms in handResult.multi_hand_landmarks:
             for id, lm in enumerate(handLms, landmark):
                 # height, width, circle
                 h, w, c = img.shape
@@ -48,10 +60,6 @@ while True:
 
             drawPoints.draw_landmarks(img, handLms, detectHands.HAND_CONNECTIONS)
 
-    # if frame is read correctly ret is True
-    if not ret:
-        print("Can't receive frame (stream end?). Exiting ...")
-        break
     # Our operations on the frame come here
     # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     # Display the resulting frame
