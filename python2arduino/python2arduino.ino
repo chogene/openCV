@@ -5,7 +5,7 @@ const int dt = 1000;
 
 void setup() 
 {
-    Serial.begin(115200);  // Set the same baud rate as in your Python code
+    Serial.begin(115200);  
     pinMode(first, OUTPUT);
     pinMode(second, OUTPUT);
     pinMode(third, OUTPUT);
@@ -13,27 +13,28 @@ void setup()
 
 void loop() 
 {
-    if (Serial.available() > 0) 
-    {
         int received = Serial.read();  // Read the single byte as an integer
+        int command = received - '0';
+ 
         Serial.print("Received: ");
-        Serial.println(received);  // Echo back the received integer for debugging
-        if (received == 3)
+        Serial.println(command);  // Echo back the received integer for debugging
+        if (command == 3)
         {
             digitalWrite(first, HIGH);
+            digitalWrite(second, LOW);
+            digitalWrite(third, LOW);
         }
-        else if (received == 4)
+        else if (command == 4)
         {
             digitalWrite(second, HIGH);
+            digitalWrite(first, LOW);
+            digitalWrite(third, LOW);
         }
-        else if (received == 5)
+        else if (command == 5)
         {
             digitalWrite(third, HIGH);
+            digitalWrite(first, LOW);
+            digitalWrite(second, LOW);
         }
-    }
-    digitalWrite(first, LOW);
-    digitalWrite(second, LOW);
-    digitalWrite(third, LOW);
-
-    delay(dt);
+        
 }
