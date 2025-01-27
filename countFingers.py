@@ -2,6 +2,16 @@ import numpy as np
 import cv2 as cv
 import mediapipe as mp
 import time
+import serial
+
+arduino = serial.Serial(port = '/dev/ttyUSB0', baudrate = 115200, timeout = .1)
+
+def write_read(x):
+    arduino.write(bytes(x, 'utf-8'))
+    time.sleep(0.05)
+    data = arduino.readLine()
+
+    return data
 
 cap = cv.VideoCapture(0)
 pTime = 0
@@ -62,6 +72,10 @@ while True:
 
             # Draw hand landmarks
             drawPoints.draw_landmarks(frame, handLms, detectHands.HAND_CONNECTIONS)
+            
+            value = write_read(fingers_up)
+
+
 
     # Display current FPS
     cTime = time.time()
