@@ -1,7 +1,7 @@
 const int first = 11;
 const int second = 12;
 const int third = 13;
-const int delay = 1000;
+const int dt = 1000;
 
 void setup() 
 {
@@ -22,15 +22,18 @@ void loop()
         {
             digitalWrite(first, HIGH);
         }
-        if (received == 4)
+        else if (received == 4)
         {
             digitalWrite(second, HIGH);
         }
-        if (received == 5)
+        else if (received == 5)
         {
             digitalWrite(third, HIGH);
         }
     }
+    digitalWrite(first, LOW);
+    digitalWrite(second, LOW);
+    digitalWrite(third, LOW);
 
-    delay(delay);
+    delay(dt);
 }
