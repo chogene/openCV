@@ -6,6 +6,7 @@ import serial
 
 arduino = serial.Serial(port = '/dev/ttyUSB0', baudrate = 115200, timeout = .1)
 
+# Write to arduino
 def write_read(x):
     arduino.write(bytes(str(x), 'utf-8'))
     data = arduino.readline().decode('utf-8').strip()
