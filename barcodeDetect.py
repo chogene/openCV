@@ -1,7 +1,7 @@
 import cv2 as cv
 from pyzbar.pyzbar import decode
 import matplotlib.pyplot as plt
-# adsfads;fklasjdf;klajsdf;lkasjf;lksdajfsda;lkfdjasd;lfksajd;
+
 def barcodeDetect(image):
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
